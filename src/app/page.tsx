@@ -15,7 +15,7 @@ export default function Home() {
             <div className="flex flex-col ps-5 max-md:ps-0 mb-2">
               <h3 className="text-white text-2xl font-bold">Sampana</h3>
               <span className="text-white text-base font-light mb-1">VEK</span>
-              <p className="text-gray-300 text-xs font-base">The album showcases VEK's charismatic authenticity and versatility, blending various genres and styles.</p>
+              <p className="text-gray-300 text-xs font-base">{"The album showcases VEK's charismatic authenticity and versatility, blending various genres and styles."}</p>
               <div className="my-4">
                 <WavePlayer
                   // onPlay={handlePlayPauseAllComments}
@@ -89,7 +89,7 @@ export default function Home() {
                   <div>3:13</div>
                 </div>
                 <div className="flex items-center justify-between text-gray-300 text-sm font-normal last-of-type:border-b-0 border-b border-white/15 py-2">
-                  <div>Can't Get Enough</div>
+                  <div>{"Can't Get Enough"}</div>
                   <div>2:15</div>
                 </div>
                 <div className="flex items-center justify-between text-gray-300 text-sm font-normal last-of-type:border-b-0 border-b border-white/15 py-2">
