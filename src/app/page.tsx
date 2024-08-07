@@ -1,113 +1,145 @@
+"use client";
+
 import Image from "next/image";
+import Cover from "../../public/image/cover.png";
+import { WavePlayer } from "./component/WavePlayer";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="w-full max-w-3xl bg-grayDark relative overflow-hidden my-10">
+        <div className="absolute w-56 h-56 rounded-full bg-white/20 -right-24 top-10 max-md:top-96 -z-0 blur-3xl"></div>
+        <div className="relative flex px-3 z-10 max-md:flex-col">
+          <div className="basis-1/2 grow py-3"><Image src={Cover} alt="album-cover" /></div>
+          <div className="basis-1/2 grow pt-3 max-md:pt-0">
+            <div className="flex flex-col ps-5 max-md:ps-0 mb-2">
+              <h3 className="text-white text-2xl font-bold">Sampana</h3>
+              <span className="text-white text-base font-light mb-1">VEK</span>
+              <p className="text-gray-300 text-xs font-base">The album showcases VEK's charismatic authenticity and versatility, blending various genres and styles.</p>
+              <div className="my-4">
+                <WavePlayer
+                  // onPlay={handlePlayPauseAllComments}
+                  audioItem={{
+                    url: "/audio/intro.mp3",
+                    duration:
+                      35.018125 * 1000
+                    ,
+                  }}
+                  theme="dark"
+                  size="large"
+                />
+              </div>
+              <p className="text-white text-lg font-normal">Rs. 1000.00</p>
+            </div>
+            <div className="flex max-[350px]:flex-col gap-1 ps-5 max-md:ps-0 mb-2">
+              <div className="flex items-stretch border border-slate-400">
+                <div className="self-center flex max-[350px]:h-8 items-center justify-between text-white px-2">
+                  <span className="cursor-pointer hover:bg-gray-500/15 w-5 h-5 flex items-center justify-center">-</span>
+                  <span className="cursor-pointer hover:bg-gray-500/15 w-5 h-5 flex items-center justify-center">1</span>
+                  <span className="cursor-pointer hover:bg-gray-500/15 w-5 h-5 flex items-center justify-center">+</span>
+                </div>
+                <div className="border-r border-slate-400"></div>
+                <a href="#" className="px-5 text-xs font-normal text-white flex items-center justify-center text-nowrap">ADD TO CART</a>
+              </div>
+              <div>
+                <a href="#" className="px-4 h-8 text-xs font-normal bg-gray-300 flex items-center justify-center text-nowrap">BUY NOW</a>
+              </div>
+            </div>
+            <div className="playlist ps-5 max-md:ps-0">
+              <h3 className="text-white text-sm font-normal mb-1">Songs(16)</h3>
+              <div className="flex flex-col h-[133px] pr-1 custom-scrollbar overflow-y-scroll">
+                <div className="flex items-center justify-between text-gray-300 text-sm font-normal last-of-type:border-b-0 border-b border-white/15 py-2">
+                  <div>Vekscuse</div>
+                  <div>3:13</div>
+                </div>
+                <div className="flex items-center justify-between text-gray-300 text-sm font-normal last-of-type:border-b-0 border-b border-white/15 py-2">
+                  <div>Nepali Funk</div>
+                  <div>2:15</div>
+                </div>
+                <div className="flex items-center justify-between text-gray-300 text-sm font-normal last-of-type:border-b-0 border-b border-white/15 py-2">
+                  <div>Late Night</div>
+                  <div>3:09</div>
+                </div>
+                <div className="flex items-center justify-between text-gray-300 text-sm font-normal last-of-type:border-b-0 border-b border-white/15 py-2">
+                  <div>You Stupid Bish</div>
+                  <div>3:13</div>
+                </div>
+                <div className="flex items-center justify-between text-gray-300 text-sm font-normal last-of-type:border-b-0 border-b border-white/15 py-2">
+                  <div>Khi Chaidaina</div>
+                  <div>2:15</div>
+                </div>
+                <div className="flex items-center justify-between text-gray-300 text-sm font-normal last-of-type:border-b-0 border-b border-white/15 py-2">
+                  <div>Bujhaideuna</div>
+                  <div>3:09</div>
+                </div>
+                <div className="flex items-center justify-between text-gray-300 text-sm font-normal last-of-type:border-b-0 border-b border-white/15 py-2">
+                  <div>Timi Nai Timi</div>
+                  <div>3:13</div>
+                </div>
+                <div className="flex items-center justify-between text-gray-300 text-sm font-normal last-of-type:border-b-0 border-b border-white/15 py-2">
+                  <div>Voodoo</div>
+                  <div>2:15</div>
+                </div>
+                <div className="flex items-center justify-between text-gray-300 text-sm font-normal last-of-type:border-b-0 border-b border-white/15 py-2">
+                  <div>Keep Kissing - Remix</div>
+                  <div>3:09</div>
+                </div>
+                <div className="flex items-center justify-between text-gray-300 text-sm font-normal last-of-type:border-b-0 border-b border-white/15 py-2">
+                  <div>Burning Heart</div>
+                  <div>3:13</div>
+                </div>
+                <div className="flex items-center justify-between text-gray-300 text-sm font-normal last-of-type:border-b-0 border-b border-white/15 py-2">
+                  <div>Can't Get Enough</div>
+                  <div>2:15</div>
+                </div>
+                <div className="flex items-center justify-between text-gray-300 text-sm font-normal last-of-type:border-b-0 border-b border-white/15 py-2">
+                  <div>Mayale</div>
+                  <div>3:09</div>
+                </div>
+                <div className="flex items-center justify-between text-gray-300 text-sm font-normal last-of-type:border-b-0 border-b border-white/15 py-2">
+                  <div>Jhari</div>
+                  <div>3:13</div>
+                </div>
+                <div className="flex items-center justify-between text-gray-300 text-sm font-normal last-of-type:border-b-0 border-b border-white/15 py-2">
+                  <div>Sakina</div>
+                  <div>2:15</div>
+                </div>
+                <div className="flex items-center justify-between text-gray-300 text-sm font-normal last-of-type:border-b-0 border-b border-white/15 py-2">
+                  <div>Bachau Malai</div>
+                  <div>3:09</div>
+                </div>
+                <div className="flex items-center justify-between text-gray-300 text-sm font-normal last-of-type:border-b-0 border-b border-white/15 py-2">
+                  <div>Sakchu</div>
+                  <div>3:09</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+      {/* // <WavePlayer
+          // onPlay={handlePlayPauseAllComments}
+      //           audioItem={{
+      //             url: "/audio/intro.mp3",
+      //             duration: 
+      //             35.018125 * 1000
+      //             ,
+      //             // info: {
+      //             //   title: nowPlayingItem?.audio
+      //             //     ? nowPlayingItem?.audio?.title || nowPlayingItem?.title
+      //             //     : nowPlayingItem?.title,
+      //             //   description: nowPlayingItem.owner ?? '',
+      //             // },
+      //           }}
+      //           theme="dark"
+      //           // audioWaveData={
+      //           //   nowPlayingItem.audio?.wave_data != undefined
+      //           //     ? nowPlayingItem.audio.wave_data
+      //           //     : JSON.stringify(defaultWaveData)
+      //           // }
+      //           size="large"
+      //         /> */}
+    </div>
   );
 }

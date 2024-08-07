@@ -18,16 +18,27 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background: rgba(19, 18, 18, 1);
+    
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background-color: #2e2e2e;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+  background-color: #ffffff;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #9b9b9b;
+  border-radius: 3px;
 }
