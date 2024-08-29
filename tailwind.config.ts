@@ -15,7 +15,15 @@ const config: Config = {
       },
       colors: {
         grayDark: '#1F1F1F',
+        grayPrimary: '#131212'
       },
+      height: {
+        'vh-20': 'calc(100vh - 20%)',
+      },
+      fontFamily: {
+        iosevka: ['var(--font-iosevka)'],
+        satoshi: ['var(--font-satoshi)'],
+      }
     },
   },
   plugins: [],
