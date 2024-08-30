@@ -47,7 +47,7 @@ export default function SinglePlayerComponent() {
             <h5 className="text-xl font-medium">Dong</h5>
             <p className="text-paragraph text-base font-normal">
               The album is an amalgamation of contemplations and reflections of
-              the artist's musical journey as well as amalgamation of
+              the artists musical journey as well as amalgamation of
               contemplations .
             </p>
           </div>
