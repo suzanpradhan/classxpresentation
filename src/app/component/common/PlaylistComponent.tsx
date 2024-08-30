@@ -7,7 +7,7 @@ import { WavePlayer } from '../WavePlayer';
 
 export default function PlaylistComponent() {
   return (
-    <div className="relative my-10 w-full max-w-3xl overflow-hidden bg-grayDark">
+    <div className="relative w-full max-w-3xl overflow-hidden bg-grayDark">
       <div className="absolute -right-24 top-10 -z-0 h-56 w-56 rounded-full bg-white/20 blur-3xl max-md:top-96"></div>
       <div className="relative z-10 flex px-3 max-md:flex-col">
         <div className="grow basis-1/2 py-3">

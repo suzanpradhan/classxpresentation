@@ -1,7 +1,15 @@
 import { Facebook, Instagram, Youtube } from 'iconsax-react';
 import HeroSlider from '../component/slider/heroSlider/HeroSlider';
+import { Tabs } from '../component/ui/tabs';
 
-export default function MusicPage() {
+const tabs = [
+  { title: 'All', url: '/music' },
+  { title: 'EP', url: '/music/ep' },
+  { title: 'Single', url: '/music/single' },
+  { title: 'Album', url: '/music/album' },
+];
+
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="wrapper">
       <div className="nav">
@@ -33,9 +41,21 @@ export default function MusicPage() {
           <div className="container mx-auto h-14"></div>
         </div>
       </div>
-      <div className="bg-slate-400">
+      <section className="bg-slate-400">
         <HeroSlider></HeroSlider>
-      </div>
+      </section>
+      <section>
+        <main className="flex min-h-screen flex-col">
+          <Tabs
+            tabs={tabs}
+            // activeTabClassName=""
+            // containerClassName=""
+            // contentClassName=""
+            // tabClassName=""
+          />
+          {children}
+        </main>
+      </section>
     </div>
   );
 }
