@@ -1,4 +1,3 @@
-'use client';
 import Image from 'next/image';
 import Cover from '../../../../public/image/image 23.png';
 import CoverDisk from '../../../../public/image/Mask group.png';
@@ -45,7 +44,7 @@ export default function SinglePlayerComponent() {
           <div className="flex flex-col gap-2">
             <h2 className="text-3xl font-medium">Jana Deu</h2>
             <h5 className="text-xl font-medium">Dong</h5>
-            <p className="text-paragraph text-base font-normal">
+            <p className="text-base font-normal text-paragraph">
               The album is an amalgamation of contemplations and reflections of
               the artists musical journey as well as amalgamation of
               contemplations .
@@ -85,7 +84,7 @@ export default function SinglePlayerComponent() {
                 </a>
                 <a
                   href="#"
-                  className="text-blackPrimary flex h-8 items-center justify-center text-nowrap bg-gray-300 px-4 text-xs font-normal"
+                  className="flex h-8 items-center justify-center text-nowrap bg-gray-300 px-4 text-xs font-normal text-blackPrimary"
                 >
                   BUY NOW
                 </a>

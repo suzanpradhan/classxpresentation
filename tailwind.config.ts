@@ -19,6 +19,7 @@ const config: Config = {
         grayPrimary: '#131212',
         blackPrimary: "rgba(19, 18, 18, 1)",
         paragraph: "#B3B3B3",
+        border: "hsla(0,0,100%,16%)",
       },
       height: {
         'vh-20': 'calc(100vh - 20%)',

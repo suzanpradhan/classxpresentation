@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Raleway } from 'next/font/google';
 import localFont from 'next/font/local';
 
+import Provider from '@/core/redux/provider';
 import './globals.css';
 
 const raleway = Raleway({ subsets: ['latin'] });
@@ -87,7 +88,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${iosevka.variable} ${satoshi.variable}`}>
-        {children}
+        <Provider>{children}</Provider>
       </body>
     </html>
   );
