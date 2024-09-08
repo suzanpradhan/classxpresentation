@@ -1,14 +1,4 @@
 'use client';
-// import { useAppDispatch } from '@/core/redux/clientStore';
-// import { RootState } from '@/core/redux/store';
-// import { formatTime } from '@/core/utils/helpers';
-// import { NowPlayingAudioItem } from '@/modules/nowPlaying/nowPlayingAudioType';
-// import {
-//   manualUpdateCurrentTime,
-//   playSong,
-//   updateCurrentTime,
-//   updateIsPlaying,
-// } from '@/modules/nowPlaying/nowPlayingReducer';
 import { Pause, Play, SkipBack, SkipForward } from 'phosphor-react';
 import { useEffect, useRef, useState } from 'react';
 
@@ -35,7 +25,6 @@ interface WavePlayerV2Props {
   audioWaveData?: string;
   controls?: boolean;
   playBackControls?: boolean;
-
   theme?: 'dark' | 'white';
   size?: 'small' | 'large';
 }
@@ -48,10 +37,6 @@ export const WavePlayer = ({
   controls = true,
   playBackControls = false,
   size,
-  // currentTime,
-  // currentPlaylistIndex,
-  // playlist,
-  // isPlaying,
 }: WavePlayerV2Props) => {
   // const dispatch = useAppDispatch();
   const audioContainer = useRef(null);
@@ -269,29 +254,11 @@ export const WavePlayer = ({
 
       <div
         ref={audioContainer}
-        className={
-          `audio-wrapper ml-1 w-full grow`
-          //  playlist[currentPlaylistIndex]?.url == audioItem.url
-          //    ? ''
-          //    :
-          //   'pointer-events-none'
-        }
+        className={`audio-wrapper ml-1 w-full grow`}
         onClick={(e) => {
           e?.stopPropagation();
         }}
       ></div>
-      <div className="bg-primary-700 item-center flex p-1 text-xs leading-[11px] text-white">
-        {/* {audioItem.duration
-          ? formatTime(
-              audioItem.duration
-                ? audioItem.duration -
-                    (playlist[currentPlaylistIndex]?.url == audioItem.url
-                      ? currentTime
-                      : 0)
-                : 0
-            )
-          : '0:00'} */}
-      </div>
     </div>
   );
 };

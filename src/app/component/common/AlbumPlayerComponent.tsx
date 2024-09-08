@@ -1,4 +1,6 @@
+'use client';
 import Image from 'next/image';
+import { Play } from 'phosphor-react';
 import Cover from '../../../../public/image/image 23.png';
 import { WavePlayer } from '../WavePlayer';
 
@@ -76,61 +78,121 @@ export default function AlbumPlayerComponent() {
         <div className="font-satoshi">
           <h5 className="my-3 px-4 text-lg font-normal">Songs (13)</h5>
           <div className="custom-scrollbar h-60 overflow-y-scroll">
-            <div className="flex items-center border-b border-white/15 px-4 last-of-type:border-b-0">
+            <div className="flex items-center gap-2 border-b border-white/15 px-4 last-of-type:border-b-0">
+              <button
+                type="button"
+                className={`rounded-full border-none bg-white p-1`}
+              >
+                <Play size={10} className="text-black" weight="fill" />
+              </button>
               <p className="flex-1 py-3 text-base font-light text-paragraph">
                 Vekscuse
               </p>
               <p className="py-3 text-base font-light text-paragraph">3:13</p>
             </div>
-            <div className="flex items-center border-b border-white/15 px-4 last-of-type:border-b-0">
+            <div className="flex items-center gap-2 border-b border-white/15 px-4 last-of-type:border-b-0">
+              <button
+                type="button"
+                className={`rounded-full border-none bg-white p-1`}
+              >
+                <Play size={10} className="text-black" weight="fill" />
+              </button>
               <p className="flex-1 py-3 text-base font-light text-paragraph">
                 Nepali Funk
               </p>
               <p className="py-3 text-base font-light text-paragraph">3:15</p>
             </div>
-            <div className="flex items-center border-b border-white/15 px-4 last-of-type:border-b-0">
+            <div className="flex items-center gap-2 border-b border-white/15 px-4 last-of-type:border-b-0">
+              <button
+                type="button"
+                className={`rounded-full border-none bg-white p-1`}
+              >
+                <Play size={10} className="text-black" weight="fill" />
+              </button>
               <p className="flex-1 py-3 text-base font-light text-paragraph">
                 Late Night
               </p>
               <p className="py-3 text-base font-light text-paragraph">2:09</p>
             </div>
-            <div className="flex items-center border-b border-white/15 px-4 last-of-type:border-b-0">
+            <div className="flex items-center gap-2 border-b border-white/15 px-4 last-of-type:border-b-0">
+              <button
+                type="button"
+                className={`rounded-full border-none bg-white p-1`}
+              >
+                <Play size={10} className="text-black" weight="fill" />
+              </button>
               <p className="flex-1 py-3 text-base font-light text-paragraph">
                 You Stupid Bicth
               </p>
               <p className="py-3 text-base font-light text-paragraph">3:17</p>
             </div>
-            <div className="flex items-center border-b border-white/15 px-4 last-of-type:border-b-0">
+            <div className="flex items-center gap-2 border-b border-white/15 px-4 last-of-type:border-b-0">
+              <button
+                type="button"
+                className={`rounded-full border-none bg-white p-1`}
+              >
+                <Play size={10} className="text-black" weight="fill" />
+              </button>
               <p className="flex-1 py-3 text-base font-light text-paragraph">
                 Kei Chaidaina
               </p>
               <p className="py-3 text-base font-light text-paragraph">3:22</p>
             </div>
-            <div className="flex items-center border-b border-white/15 px-4 last-of-type:border-b-0">
+            <div className="flex items-center gap-2 border-b border-white/15 px-4 last-of-type:border-b-0">
+              <button
+                type="button"
+                className={`rounded-full border-none bg-white p-1`}
+              >
+                <Play size={10} className="text-black" weight="fill" />
+              </button>
               <p className="flex-1 py-3 text-base font-light text-paragraph">
                 Vekscuse
               </p>
               <p className="py-3 text-base font-light text-paragraph">3:13</p>
             </div>
-            <div className="flex items-center border-b border-white/15 px-4 last-of-type:border-b-0">
+            <div className="flex items-center gap-2 border-b border-white/15 px-4 last-of-type:border-b-0">
+              <button
+                type="button"
+                className={`rounded-full border-none bg-white p-1`}
+              >
+                <Play size={10} className="text-black" weight="fill" />
+              </button>
               <p className="flex-1 py-3 text-base font-light text-paragraph">
                 Nepali Funk
               </p>
               <p className="py-3 text-base font-light text-paragraph">3:15</p>
             </div>
-            <div className="flex items-center border-b border-white/15 px-4 last-of-type:border-b-0">
+            <div className="flex items-center gap-2 border-b border-white/15 px-4 last-of-type:border-b-0">
+              <button
+                type="button"
+                className={`rounded-full border-none bg-white p-1`}
+              >
+                <Play size={10} className="text-black" weight="fill" />
+              </button>
               <p className="flex-1 py-3 text-base font-light text-paragraph">
                 Late Night
               </p>
               <p className="py-3 text-base font-light text-paragraph">2:09</p>
             </div>
-            <div className="flex items-center border-b border-white/15 px-4 last-of-type:border-b-0">
+            <div className="flex items-center gap-2 border-b border-white/15 px-4 last-of-type:border-b-0">
+              <button
+                type="button"
+                className={`rounded-full border-none bg-white p-1`}
+              >
+                <Play size={10} className="text-black" weight="fill" />
+              </button>
               <p className="flex-1 py-3 text-base font-light text-paragraph">
                 You Stupid Bicth
               </p>
               <p className="py-3 text-base font-light text-paragraph">3:17</p>
             </div>
-            <div className="flex items-center border-b border-white/15 px-4 last-of-type:border-b-0">
+            <div className="flex items-center gap-2 border-b border-white/15 px-4 last-of-type:border-b-0">
+              <button
+                type="button"
+                className={`rounded-full border-none bg-white p-1`}
+              >
+                <Play size={10} className="text-black" weight="fill" />
+              </button>
               <p className="flex-1 py-3 text-base font-light text-paragraph">
                 Kei Chaidaina
               </p>

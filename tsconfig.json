@@ -26,7 +26,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/app/music/page.tsx.back"
+    "src/app/music/page.tsx.back",
+    "src/app/component/common/NowPlayingBarV3.tsx.back"
   ],
   "exclude": ["node_modules"]
 }

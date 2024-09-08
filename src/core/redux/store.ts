@@ -1,10 +1,12 @@
+import nowPlayingReducer from '@/modules/nowPlaying/nowPlayingReducer';
+import playerTimerReducer from '@/modules/nowPlaying/playerTimerReducer';
 import { configureStore } from '@reduxjs/toolkit';
-import bookingReducer from '../../modules/bookings/bookingSlice';
 
 export const makeStore = () => {
     return configureStore({
         reducer: {
-            booking: bookingReducer,
+            nowPlaying: nowPlayingReducer,
+            playerTimer: playerTimerReducer,
         },
         // middleware(getDefaultMiddleware) {
         //     return getDefaultMiddleware()
