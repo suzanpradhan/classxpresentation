@@ -1,5 +1,11 @@
 'use client';
-import { Pause, Play, SkipBack, SkipForward } from 'phosphor-react';
+import { useAppDispatch, useAppSelector } from '@/core/redux/hooks';
+import { RootState } from '@/core/redux/store';
+import {
+  updateCurrentTime,
+  updateIsPlaying,
+} from '@/modules/nowPlaying/nowPlayingReducer';
+import { Pause, Play } from 'phosphor-react';
 import { useEffect, useRef, useState } from 'react';
 
 // import { ConnectedProps, connect } from 'react-redux';
@@ -20,7 +26,6 @@ export type NowPlayingAudioItem = {
 };
 
 interface WavePlayerV2Props {
-  audioItem: NowPlayingAudioItem;
   onPlay?: () => void;
   audioWaveData?: string;
   controls?: boolean;
@@ -30,24 +35,28 @@ interface WavePlayerV2Props {
 }
 
 export const WavePlayer = ({
-  audioItem,
-  onPlay,
-  audioWaveData,
-  theme = 'dark',
+  // onPlay,
+  // audioWaveData,
+  // theme = 'dark',
   controls = true,
-  playBackControls = false,
-  size,
+  // playBackControls = false,
+  // size,
 }: WavePlayerV2Props) => {
-  // const dispatch = useAppDispatch();
+  const currentSong = useAppSelector(
+    (state: RootState) => state.nowPlaying.currentSong
+  );
+  const isPlaying = useAppSelector(
+    (state: RootState) => state.nowPlaying.isPlaying
+  );
+  const dispatch = useAppDispatch();
   const audioContainer = useRef(null);
   const waveRef = useRef<WaveSurfer | undefined>(undefined);
   const audioRef = useRef<HTMLAudioElement | undefined>(undefined);
-  const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const animationRef = useRef<number | undefined>();
   const [waveLoaded, setWaveLoaded] = useState(false);
   const [sessionPlayed, setSessionPlayed] = useState(false);
-  var audioId = audioItem.info?.cid ? audioItem.info!.cid : audioItem.info?.id;
+  const [isLoading, setIsLoading] = useState(false);
 
   function getWaveColor(id: number | undefined) {
     var sessionValue = sessionStorage.getItem('plays');
@@ -63,174 +72,157 @@ export const WavePlayer = ({
     }
   }
 
+  const cleanUpAudio = () => {
+    console.log('cleapUpAudio');
+    if (animationRef.current) {
+      console.log('animation clear');
+
+      cancelAnimationFrame(animationRef.current);
+      animationRef.current == undefined;
+    }
+    // if (audioRef.current != undefined) {
+    //   audioRef.current.pause();
+    //   audioRef.current.end();
+    //   audioRef.current = undefined;
+    //   // audioRef.current.removeEventListener('ended', () => {});
+    //   // audioRef.current.removeEventListener('pause', () => {});
+    //   // audioRef.current.removeEventListener('play', () => {});
+    //   // audioRef.current.currentTime = 0;
+    //   // audioRef.current = undefined;
+    // }
+    if (waveRef.current) {
+      waveRef.current.destroy();
+      waveRef.current = undefined;
+    }
+  };
+
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const create = async () => {
-      if (waveRef.current) {
-        waveRef.current.destroy();
-        waveRef.current = undefined;
-      }
+    if (audioRef.current != undefined) {
+      cleanUpAudio();
+    }
+    if (waveRef.current) return;
 
+    const create = async () => {
       if (!audioContainer.current) return;
 
-      var waveColor = (waveRef.current = WaveSurfer.create({
+      console.log('create wavesurfer');
+
+      waveRef.current = WaveSurfer.create({
         container: audioContainer.current,
         waveColor: 'gray',
-        progressColor: getWaveColor(audioId),
-        // url:"/audio/intro.mp3",
+        progressColor: getWaveColor(currentSong?.info?.id),
         cursorColor: 'transprant',
         barWidth: 1,
         barGap: 1,
         barRadius: 1,
-        duration: 35.018125 * 1000,
-
-        // audioWaveData ? JSON.parse(audioWaveData) :
+        duration: currentSong?.duration,
         peaks: [defaultWaveData],
         height: 30,
-      }));
-
-      var tempAudio = new Audio(audioItem.url);
-      audioRef.current = tempAudio;
-
-      waveRef.current.on('drag', function (progress: any) {
-        var currentTime = progress * audioItem.duration;
-        if (audioRef.current) {
-          audioRef.current.currentTime = currentTime / 1000;
-        }
-        setCurrentTime(currentTime);
-        // dispatch(
-        //   manualUpdateCurrentTime({
-        //     currentTime: currentTime,
-        //     url: audioItem.url,
-        //   })
-        // );
       });
 
-      waveRef.current.on('click', function (progress: any) {
-        waveRef.current?.manualRenderProgress(progress);
-        var currentTime = progress * audioItem.duration;
-        if (audioRef.current) {
-          audioRef.current.currentTime = currentTime / 1000;
-        }
-        setCurrentTime(currentTime);
-        // setCurrentTime(currentTime);
-        // dispatch(
-        //   manualUpdateCurrentTime({
-        //     currentTime: currentTime,
-        //     url: audioItem.url,
-        //   })
-        // );
-      });
+      if (audioRef.current != undefined && currentSong) {
+        console.log('here');
 
-      // waveRef.current.on('ready', async function () {
-      //   // if (!waveLoaded) {
-      //   //   setWaveLoaded(true);
-      //   //   console.log(waveRef.current?.exportPeaks()[0]);
-      //   // }
-      //   console.log(waveRef.current?.exportPeaks()[0]);
+        audioRef.current!.src = currentSong!.url;
+        audioRef.current?.load();
+      } else {
+        var tempAudio = new Audio(currentSong?.url);
+        audioRef.current = tempAudio;
+      }
+
+      // waveRef.current.on('click', function (progress: any) {
+      //   waveRef.current?.manualRenderProgress(progress);
+      //   var currentTime =
+      //     progress * (nowPlayingState.currentSong?.duration ?? 0);
+      //   if (audioRef.current) {
+      //     audioRef.current.currentTime = currentTime / 1000;
+      //   }
+      //   setCurrentTime(currentTime);
       // });
 
       return () => {
         waveRef.current?.destroy();
       };
     };
+
     create();
-  }, [audioItem]);
+  }, [currentSong]);
 
   useEffect(() => {
     if (!waveRef.current) {
       return;
     }
-    if (currentTime != 0) {
-      waveRef.current?.manualRenderProgress(currentTime / audioItem.duration);
+    console.log('updating');
+
+    if (currentTime != 0 && currentSong?.duration != undefined) {
+      waveRef.current?.manualRenderProgress(currentTime / currentSong.duration);
     }
   }, [currentTime]);
 
-  const getCurrentTime = () => {
-    setCurrentTime(audioRef.current!.currentTime * 1000);
-    animationRef.current = requestAnimationFrame(getCurrentTime);
-  };
-
   useEffect(() => {
-    if (audioRef.current) {
-      isPlaying ? audioRef.current?.play() : audioRef.current?.pause();
-    }
-  }, [isPlaying]);
-
-  useEffect(() => {
-    if (waveRef.current) {
-      waveRef.current.on('ready', () => {
-        console.log(waveRef.current?.exportPeaks()[0]);
-        //   console.log('audio Duration' );
-
-        //   // console.log(waveRef.current!.exportPeaks()[0]);
-        //   const getAudioDuration = waveRef.current!.getDuration();
-        //   console.log('audio Duration' + getAudioDuration);
-        // });
-
-        // waveRef.current?.on('play', () => {
-      });
-      //
-    }
-  }, [waveRef.current]);
-
-  useEffect(() => {
-    if (waveRef.current) {
+    if (audioRef.current != undefined) {
+      console.log('adding listerners');
       audioRef.current?.addEventListener('ended', () => {
         if (animationRef?.current) {
           cancelAnimationFrame(animationRef.current);
         }
-        setIsPlaying(false);
+        dispatch(updateIsPlaying(false));
       });
 
       audioRef.current?.addEventListener('pause', () => {
+        console.log('pause');
+
         if (animationRef.current) {
           cancelAnimationFrame(animationRef.current);
         }
       });
 
       // waveRef.current.on('ready', () => {
-      //   // console.log('audio Duration' );
-
-      //   // console.log(waveRef.current!.exportPeaks()[0]);
       //   const getAudioDuration = waveRef.current!.getDuration();
-      //   console.log('audio Duration' + getAudioDuration);
       // });
 
+      const getCurrentTime = () => {
+        setCurrentTime(audioRef.current!.currentTime * 1000);
+        dispatch(updateCurrentTime(audioRef.current!.currentTime));
+        animationRef.current = requestAnimationFrame(getCurrentTime);
+      };
+
       audioRef.current?.addEventListener('play', () => {
+        console.log('on play');
+        console.log('audioref' + audioRef.current?.src);
+
         getCurrentTime();
       });
-      //
+
+      getCurrentTime();
+      audioRef.current?.play();
     }
-  }, [audioRef.current]);
+    return () => {
+      audioRef.current?.removeEventListener('ended', () => {});
+      audioRef.current?.removeEventListener('pause', () => {});
+      audioRef.current?.removeEventListener('play', () => {});
+    };
+  }, [audioRef.current?.src]);
 
   const handlePlayPause = async (e: any) => {
     e?.stopPropagation();
 
     if (isPlaying) {
-      setIsPlaying(false);
+      dispatch(updateIsPlaying(false));
     } else {
-      setIsPlaying(true);
+      dispatch(updateIsPlaying(true));
     }
-    // if (playlist[currentPlaylistIndex]?.url == audioItem.url) {
-    //   if (isPlaying) {
-    //     dispatch(updateIsPlaying(false));
-    //   } else {
-    //     dispatch(updateIsPlaying(true));
-    //   }
-    // } else {
-    //   dispatch(playSong(audioItem));
-    // }
   };
+
+  useEffect(() => {
+    if (audioRef != undefined) {
+      isPlaying ? audioRef.current?.play() : audioRef.current?.pause();
+    }
+  }, [isPlaying]);
 
   return (
     <div className="relative flex w-full items-center gap-1">
-      {playBackControls && (
-        <div className="mr-1 rounded-full bg-white/10 p-[6px] backdrop-blur-sm">
-          <SkipBack size={18} className={`${'text-white'}`} weight="fill" />
-        </div>
-      )}
-
       {controls ? (
         <button
           type="button"
@@ -245,11 +237,6 @@ export const WavePlayer = ({
         </button>
       ) : (
         <></>
-      )}
-      {playBackControls && (
-        <div className="ml-1 rounded-full bg-white/10 p-[6px] backdrop-blur-sm">
-          <SkipForward size={18} className={`${'text-white'}`} weight="fill" />
-        </div>
       )}
 
       <div

@@ -11,8 +11,8 @@ const tabs = [
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="wrapper">
-      <div className="nav">
+    <div className="h-full overflow-y-scroll">
+      <div className="">
         <div className="top-nav bg-black">
           <div className="container mx-auto h-10">
             <div className="flex h-full items-center justify-end gap-5">

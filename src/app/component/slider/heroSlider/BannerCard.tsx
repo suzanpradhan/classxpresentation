@@ -1,3 +1,5 @@
+'use client';
+
 import CoverImage from '../../../../../public/image/banner/banner-img-1.png';
 import { Meteors } from '../../ui/meteors';
 export default function BannerCard({ cardData }: { cardData: number }) {

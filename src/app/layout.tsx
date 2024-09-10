@@ -3,6 +3,7 @@ import { Raleway } from 'next/font/google';
 import localFont from 'next/font/local';
 
 import Provider from '@/core/redux/provider';
+import NowPlayingBar from './component/common/NowPlayingBar';
 import './globals.css';
 
 const raleway = Raleway({ subsets: ['latin'] });
@@ -87,8 +88,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${iosevka.variable} ${satoshi.variable}`}>
-        <Provider>{children}</Provider>
+      <body className={`${iosevka.variable} ${satoshi.variable} `}>
+        <Provider>
+          <div className="mb-10">{children}</div>
+          <NowPlayingBar />
+        </Provider>
       </body>
     </html>
   );

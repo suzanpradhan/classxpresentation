@@ -1,4 +1,4 @@
-import MaxWidthWrapper from '@/app/component/common/max-width-wrapper';
+import MaxWidthWrapper from '@/app/component/common/MaxWidthWrapper';
 
 export default function AllPages() {
   return (

@@ -1,4 +1,4 @@
-import MaxWidthWrapper from '@/app/component/common/max-width-wrapper';
+import MaxWidthWrapper from '@/app/component/common/MaxWidthWrapper';
 import SinglePlayerComponent from '@/app/component/common/SinglePlayerComponent';
 
 export default function SinglePage() {

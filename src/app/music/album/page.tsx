@@ -1,5 +1,5 @@
 import AlbumPlayerComponent from '@/app/component/common/AlbumPlayerComponent';
-import MaxWidthWrapper from '@/app/component/common/max-width-wrapper';
+import MaxWidthWrapper from '@/app/component/common/MaxWidthWrapper';
 
 export default function AlbumPage() {
   return (
