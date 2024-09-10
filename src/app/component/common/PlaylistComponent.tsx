@@ -25,10 +25,10 @@ export default function PlaylistComponent() {
             <div className="my-4">
               <WavePlayer
                 // onPlay={handlePlayPauseAllComments}
-                audioItem={{
-                  url: '/audio/intro.mp3',
-                  duration: 35.018125 * 1000,
-                }}
+                // audioItem={{
+                //   url: '/audio/intro.mp3',
+                //   duration: 35.018125 * 1000,
+                // }}
                 theme="dark"
                 size="large"
               />

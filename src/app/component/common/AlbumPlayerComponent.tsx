@@ -97,9 +97,7 @@ export default function AlbumPlayerComponent() {
             <div>
               {nowPlayingState.currentSong?.info?.playlistId ===
                 playlist.playListId && nowPlayingState.currentSong.url ? (
-                <WavePlayer
-                // nowPlayingState={nowPlayingState}
-                />
+                <WavePlayer />
               ) : (
                 <></>
               )}

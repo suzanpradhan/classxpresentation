@@ -52,10 +52,10 @@ export default function SinglePlayerComponent() {
           </div>
           <div>
             <WavePlayer
-              audioItem={{
-                url: '/audio/intro.mp3',
-                duration: 35.018125 * 1000,
-              }}
+              // audioItem={{
+              //   url: '/audio/intro.mp3',
+              //   duration: 35.018125 * 1000,
+              // }}
               theme="dark"
               size="large"
             />
