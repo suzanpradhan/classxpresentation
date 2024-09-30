@@ -1,18 +1,33 @@
 'use client';
-import { msToTimeFormat } from '@/core/helper/timeFormat';
 import { useAppDispatch, useAppSelector } from '@/core/redux/hooks';
 import { RootState } from '@/core/redux/store';
 import {
   playSong,
+  showNowPlayingBar,
   updateIsPlaying,
 } from '@/modules/nowPlaying/nowPlayingReducer';
 import Image from 'next/image';
-import { Pause, Play } from 'phosphor-react';
+import { useEffect } from 'react';
 import Cover from '../../../../public/image/image 23.png';
-import { WavePlayer } from '../WavePlayer';
+import PlaylistComponent from './PlaylistComponent';
+import SongInfoComponent from './SongInfoComponent';
 
-const playlist = {
-  playListId: '1',
+export type SongType = {
+  id: number;
+  audioUrl: string;
+  name: string;
+  duration: number;
+  description: string;
+};
+
+export type PlaylistType = {
+  playListId: number;
+  albumName: string;
+  songs: Array<SongType>;
+};
+
+const playlist: PlaylistType = {
+  playListId: 1,
   albumName: 'Khatra Album',
 
   songs: [
@@ -69,6 +84,25 @@ export default function AlbumPlayerComponent() {
 
   const currentSong = useAppSelector((state: RootState) => state.nowPlaying);
 
+  useEffect(() => {
+    dispatch(
+      playSong({
+        url: playlist.songs[0].audioUrl,
+        duration: playlist.songs[0].duration,
+        info: {
+          id: playlist.songs[0].id,
+          albumName: playlist.albumName,
+          coverImage: Cover.src,
+          playlistId: playlist.playListId.toString(),
+          description: playlist.songs[0].description,
+          title: playlist.songs[0].name,
+        },
+      })
+    );
+    dispatch(updateIsPlaying(false));
+    dispatch(showNowPlayingBar(false));
+  }, []);
+
   return (
     <div className="flex flex-col gap-5">
       <div className="flex items-stretch">
@@ -83,115 +117,9 @@ export default function AlbumPlayerComponent() {
             />
           </div>
         </div>
-        <div className="w-full basis-4/6">
-          <div className="ms-10 flex h-full flex-col justify-evenly gap-4 font-satoshi">
-            <div className="flex flex-col gap-2">
-              <h2 className="text-3xl font-medium">Jana Deu</h2>
-              <h5 className="text-xl font-medium">Dong</h5>
-              <p className="text-base font-normal text-paragraph">
-                The album is an amalgamation of contemplations and reflections
-                of the artists musical journey as well as amalgamation of
-                contemplations .
-              </p>
-            </div>
-            <div>
-              {nowPlayingState.currentSong?.info?.playlistId ===
-                playlist.playListId && nowPlayingState.currentSong.url ? (
-                <WavePlayer />
-              ) : (
-                <></>
-              )}
-            </div>
-            <div className="flex flex-col gap-2">
-              <p className="text-base font-medium">Rs. 1000.00</p>
-              <div className="flex items-stretch gap-2">
-                <div className="flex items-stretch justify-between">
-                  <div className="flex h-8 w-8 cursor-pointer items-center justify-center border border-slate-400 hover:bg-gray-500/15">
-                    -
-                  </div>
-                  <div className="flex h-8 w-8 cursor-pointer items-center justify-center">
-                    1
-                  </div>
-                  <div className="flex h-8 w-8 cursor-pointer items-center justify-center border border-slate-400 hover:bg-gray-500/15">
-                    +
-                  </div>
-                </div>
-
-                <div className="flex items-center">
-                  <a
-                    href="#"
-                    className="flex h-8 items-center justify-center text-nowrap border border-gray-300 px-5 text-xs font-normal text-white"
-                  >
-                    ADD TO CART
-                  </a>
-                  <a
-                    href="#"
-                    className="flex h-8 items-center justify-center text-nowrap bg-gray-300 px-4 text-xs font-normal text-blackPrimary"
-                  >
-                    BUY NOW
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <SongInfoComponent playlistId={playlist.playListId} />
       </div>
-      <div className="rounded-md border border-white/15">
-        <div className="font-satoshi">
-          <h5 className="my-3 px-4 text-lg font-normal">Songs (13)</h5>
-          <div className="custom-scrollbar h-60 overflow-y-scroll">
-            {playlist.songs.map((item, index) => (
-              <div
-                key={index}
-                className="flex items-center gap-2 border-b border-white/15 px-4 last-of-type:border-b-0"
-              >
-                <button
-                  type="button"
-                  className={`rounded-full border-none bg-white p-1`}
-                  onClick={() => {
-                    if (nowPlayingState.currentSong?.info?.id !== item.id) {
-                      dispatch(
-                        playSong({
-                          url: item.audioUrl,
-                          duration: item.duration,
-                          info: {
-                            id: item.id,
-                            albumName: playlist.albumName,
-                            coverImage: Cover.src,
-                            playlistId: playlist.playListId,
-                            description: item.description,
-                            title: item.name,
-                          },
-                        })
-                      );
-                      // dispatch(updateCurrentTime(0));
-                    } else {
-                      nowPlayingState.isPlaying
-                        ? dispatch(updateIsPlaying(false))
-                        : dispatch(updateIsPlaying(true));
-                    }
-                  }}
-                >
-                  {nowPlayingState.currentSong?.info?.playlistId ===
-                    playlist.playListId &&
-                  nowPlayingState.currentSong.url === item.audioUrl &&
-                  nowPlayingState.isPlaying ? (
-                    <Pause size={10} className="text-black" weight="fill" />
-                  ) : (
-                    <Play size={10} className="text-black" weight="fill" />
-                  )}
-                </button>
-                <p className="flex-1 py-3 text-base font-light text-paragraph">
-                  {item.name}
-                </p>
-                <p className="py-3 text-base font-light text-paragraph">
-                  {msToTimeFormat(item.duration)}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+      <PlaylistComponent playlist={playlist} />
     </div>
   );
 }
