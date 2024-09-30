@@ -2,6 +2,7 @@
 import { useAppDispatch, useAppSelector } from '@/core/redux/hooks';
 import { RootState } from '@/core/redux/store';
 import {
+  showNowPlayingBar,
   updateCurrentTime,
   updateIsPlaying,
 } from '@/modules/nowPlaying/nowPlayingReducer';
@@ -48,15 +49,14 @@ export const WavePlayer = ({
   const isPlaying = useAppSelector(
     (state: RootState) => state.nowPlaying.isPlaying
   );
+
   const dispatch = useAppDispatch();
   const audioContainer = useRef(null);
   const waveRef = useRef<WaveSurfer | undefined>(undefined);
   const audioRef = useRef<HTMLAudioElement | undefined>(undefined);
   const [currentTime, setCurrentTime] = useState<number>(0);
   const animationRef = useRef<number | undefined>();
-  const [waveLoaded, setWaveLoaded] = useState(false);
   const [sessionPlayed, setSessionPlayed] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   function getWaveColor(id: number | undefined) {
     var sessionValue = sessionStorage.getItem('plays');
@@ -80,16 +80,6 @@ export const WavePlayer = ({
       cancelAnimationFrame(animationRef.current);
       animationRef.current == undefined;
     }
-    // if (audioRef.current != undefined) {
-    //   audioRef.current.pause();
-    //   audioRef.current.end();
-    //   audioRef.current = undefined;
-    //   // audioRef.current.removeEventListener('ended', () => {});
-    //   // audioRef.current.removeEventListener('pause', () => {});
-    //   // audioRef.current.removeEventListener('play', () => {});
-    //   // audioRef.current.currentTime = 0;
-    //   // audioRef.current = undefined;
-    // }
     if (waveRef.current) {
       waveRef.current.destroy();
       waveRef.current = undefined;
@@ -122,24 +112,12 @@ export const WavePlayer = ({
       });
 
       if (audioRef.current != undefined && currentSong) {
-        console.log('here');
-
         audioRef.current!.src = currentSong!.url;
         audioRef.current?.load();
       } else {
         var tempAudio = new Audio(currentSong?.url);
         audioRef.current = tempAudio;
       }
-
-      // waveRef.current.on('click', function (progress: any) {
-      //   waveRef.current?.manualRenderProgress(progress);
-      //   var currentTime =
-      //     progress * (nowPlayingState.currentSong?.duration ?? 0);
-      //   if (audioRef.current) {
-      //     audioRef.current.currentTime = currentTime / 1000;
-      //   }
-      //   setCurrentTime(currentTime);
-      // });
 
       return () => {
         waveRef.current?.destroy();
@@ -178,10 +156,6 @@ export const WavePlayer = ({
         }
       });
 
-      // waveRef.current.on('ready', () => {
-      //   const getAudioDuration = waveRef.current!.getDuration();
-      // });
-
       const getCurrentTime = () => {
         setCurrentTime(audioRef.current!.currentTime * 1000);
         dispatch(updateCurrentTime(audioRef.current!.currentTime));
@@ -189,14 +163,11 @@ export const WavePlayer = ({
       };
 
       audioRef.current?.addEventListener('play', () => {
-        console.log('on play');
-        console.log('audioref' + audioRef.current?.src);
-
         getCurrentTime();
       });
 
       getCurrentTime();
-      audioRef.current?.play();
+      if (isPlaying) audioRef.current?.play();
     }
     return () => {
       audioRef.current?.removeEventListener('ended', () => {});
@@ -213,6 +184,8 @@ export const WavePlayer = ({
     } else {
       dispatch(updateIsPlaying(true));
     }
+
+    dispatch(showNowPlayingBar(true));
   };
 
   useEffect(() => {

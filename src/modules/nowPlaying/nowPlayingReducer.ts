@@ -7,6 +7,7 @@ export interface NowPlayingState {
   isPlaying: boolean;
   currentTime: number;
   // currentPlaylistIndex: number;
+  showNowPlayingBar: boolean;
   playlistId?: string;
   currentSong?: NowPlayingAudioItem;
   flag: boolean;
@@ -17,6 +18,7 @@ export interface NowPlayingState {
 
 const initialState: NowPlayingState = {
   isPlaying: false,
+  showNowPlayingBar: false,
   currentTime: 0,
   flag: false,
   manualCurrentTimeUpdateFlag: false,
@@ -39,6 +41,9 @@ export const nowPlayingSlice = createSlice({
         state.currentTime = action.payload.currentTime;
         state.manualCurrentTimeUpdateFlag = true;
       }
+    },
+    showNowPlayingBar: (state, action: PayloadAction<boolean>) => {
+      state.showNowPlayingBar = action.payload
     },
     updateIsPlaying: (state, action: PayloadAction<boolean>) => {
       state.isPlaying = action.payload;
@@ -72,6 +77,7 @@ export const {
   updateIsPlaying,
   playSong,
   updateFlag,
+  showNowPlayingBar
 } = nowPlayingSlice.actions;
 
 export default nowPlayingSlice.reducer;
