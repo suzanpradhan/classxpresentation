@@ -1,7 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import {
-  NowPlayingAudioItem
-} from './nowPlayingAudioType';
+import { TrackResponseType } from '../tracks/tracksType';
 
 export interface NowPlayingState {
   isPlaying: boolean;
@@ -9,7 +7,7 @@ export interface NowPlayingState {
   // currentPlaylistIndex: number;
   showNowPlayingBar: boolean;
   playlistId?: string;
-  currentSong?: NowPlayingAudioItem;
+  currentSong?: TrackResponseType;
   flag: boolean;
   totalDuration?: number;
   manualCurrentTimeUpdateFlag: boolean;
@@ -33,10 +31,10 @@ export const nowPlayingSlice = createSlice({
     },
     manualUpdateCurrentTime: (
       state,
-      action: PayloadAction<{ currentTime: number; url: string }>
+      action: PayloadAction<{ currentTime: number; file: string }>
     ) => {
       if (
-        action.payload.url == state.currentSong?.url
+        action.payload.file == state.currentSong?.file
       ) {
         state.currentTime = action.payload.currentTime;
         state.manualCurrentTimeUpdateFlag = true;
@@ -48,11 +46,11 @@ export const nowPlayingSlice = createSlice({
     updateIsPlaying: (state, action: PayloadAction<boolean>) => {
       state.isPlaying = action.payload;
     },
-    playSong: (state, action: PayloadAction<NowPlayingAudioItem>) => {
+    playSong: (state, action: PayloadAction<TrackResponseType>) => {
       state.currentTime = 0;
       state.currentSong = action.payload;
       state.flag = true;
-      state.playlistId = action.payload.info?.playlistId;
+      state.playlistId = action.payload.release.toString();
       state.isPlaying = true;
       state.totalDuration = undefined;
 

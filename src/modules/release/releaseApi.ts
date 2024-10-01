@@ -35,6 +35,26 @@ const releaseApi = baseApi.injectEndpoints({
                 return currentArg !== previousArg;
             },
         }),
+        getEachRelease: builder.query<ReleaseResponseType, string>({
+            query: (releaseId) => `${apiPaths.releaseUrl}${releaseId}/`,
+            providesTags: (result, error, id) => {
+                return [{ type: 'Release', id }];
+            },
+            serializeQueryArgs: ({ queryArgs, endpointName }) => {
+                return `${endpointName}-${queryArgs}`;
+            },
+            async onQueryStarted(payload, { queryFulfilled }) {
+                try {
+                    await queryFulfilled;
+                } catch (err) {
+                    console.log(err);
+                    // toast.error(JSON.stringify(err));
+                }
+            },
+            // transformResponse: (response: any) => {
+            //   return response;
+            // },
+        }),
 
     }),
 

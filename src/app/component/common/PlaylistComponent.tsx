@@ -65,9 +65,9 @@ export default function PlaylistComponent({
                   // }
                 }}
               >
-                {nowPlayingState.currentSong?.info?.playlistId ===
+                {nowPlayingState.currentSong?.release.toString() ===
                   release.id.toString() &&
-                nowPlayingState.currentSong?.url === item.file &&
+                nowPlayingState.currentSong?.file === item.file &&
                 nowPlayingState.isPlaying ? (
                   <Pause size={10} className="text-black" weight="fill" />
                 ) : (

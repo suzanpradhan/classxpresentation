@@ -5,8 +5,11 @@ import { msToTimeFormat } from '@/core/helper/timeFormat';
 import { useAppDispatch, useAppSelector } from '@/core/redux/hooks';
 import { RootState } from '@/core/redux/store';
 import { updateIsPlaying } from '@/modules/nowPlaying/nowPlayingReducer';
+import releaseApi from '@/modules/release/releaseApi';
+import { ReleaseResponseType } from '@/modules/release/releaseType';
 import Image from 'next/image';
 import { Pause, Play } from 'phosphor-react';
+import { useEffect } from 'react';
 
 export default function NowPlayingBar() {
   const dispatch = useAppDispatch();
@@ -14,14 +17,29 @@ export default function NowPlayingBar() {
     (state: RootState) => state.nowPlaying
   );
 
-  return nowPlayingState.currentSong?.url &&
+  useEffect(() => {
+    if (nowPlayingState.currentSong?.release) {
+      dispatch(
+        releaseApi.endpoints.getEachRelease.initiate(
+          nowPlayingState.currentSong?.release.toString()
+        )
+      );
+    }
+  }, [dispatch, nowPlayingState.currentSong?.release]);
+
+  const release = useAppSelector(
+    (state: RootState) =>
+      state.baseApi.queries['getUsersPermissions']?.data as ReleaseResponseType
+  );
+
+  return nowPlayingState.currentSong?.file &&
     nowPlayingState.showNowPlayingBar ? (
     <div className="fixed bottom-0 my-4 h-10 w-full px-2">
       <div className="mx-auto flex h-full w-full max-w-7xl items-center gap-4 border border-white/40 bg-black pr-1">
-        {nowPlayingState.currentSong.info?.coverImage ? (
+        {nowPlayingState.currentSong?.release ? (
           <span className="relative aspect-square h-full">
             <Image
-              src={nowPlayingState.currentSong.info?.coverImage}
+              src={release.cover_small}
               alt="cover image"
               className="absolute p-1"
               fill
@@ -33,9 +51,9 @@ export default function NowPlayingBar() {
         )}
 
         <span className="w-40">
-          <p className="text-sm">{nowPlayingState.currentSong.info?.title}</p>
+          <p className="text-sm">{nowPlayingState.currentSong?.title}</p>
           <p className="line-clamp-1 text-xs">
-            {nowPlayingState.currentSong.info?.albumName.toUpperCase()}
+            {nowPlayingState.currentSong?.title.toUpperCase()}
           </p>
         </span>
         <button
@@ -66,12 +84,12 @@ export default function NowPlayingBar() {
           disabled
           value={[
             ((nowPlayingState.currentTime * 1000) /
-              nowPlayingState.currentSong.duration) *
+              parseInt(nowPlayingState.currentSong?.duration)) *
               100,
           ]}
         />
         <p className="text-xs">
-          {msToTimeFormat(nowPlayingState.currentSong.duration)}
+          {msToTimeFormat(parseInt(nowPlayingState.currentSong?.duration))}
         </p>
       </div>
     </div>
