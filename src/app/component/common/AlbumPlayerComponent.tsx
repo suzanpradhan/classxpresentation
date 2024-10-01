@@ -1,14 +1,12 @@
 'use client';
 import { useAppDispatch, useAppSelector } from '@/core/redux/hooks';
 import { RootState } from '@/core/redux/store';
-import {
-  playSong,
-  showNowPlayingBar,
-  updateIsPlaying,
-} from '@/modules/nowPlaying/nowPlayingReducer';
+import { PaginatedResponseType } from '@/core/types/responseTypes';
+import { ReleaseResponseType } from '@/modules/release/releaseType';
+import tracksApi from '@/modules/tracks/tracksApi';
+import { TrackResponseType } from '@/modules/tracks/tracksType';
 import Image from 'next/image';
-import { useEffect } from 'react';
-import Cover from '../../../../public/image/image 23.png';
+import { useEffect, useState } from 'react';
 import PlaylistComponent from './PlaylistComponent';
 import SongInfoComponent from './SongInfoComponent';
 
@@ -26,57 +24,12 @@ export type PlaylistType = {
   songs: Array<SongType>;
 };
 
-const playlist: PlaylistType = {
-  playListId: 1,
-  albumName: 'Khatra Album',
-
-  songs: [
-    {
-      id: 1,
-      audioUrl: '/audio/intro.mp3',
-      name: 'Intro',
-      duration: 35000,
-      description: ' Intro Song',
-    },
-    {
-      id: 2,
-      audioUrl: '/audio/ram.mp3',
-      name: 'Bhajan',
-      duration: 162000,
-      description: ' Bhajan of ram',
-    },
-    {
-      id: 3,
-      audioUrl: '/audio/audioFile.mp3',
-      name: 'Audiofile',
-      duration: 42000,
-      description: ' Audio File song',
-    },
-    {
-      id: 4,
-      audioUrl: '/audio/baansghari.mp3',
-      name: 'BaanshGhari',
-      duration: 312000,
-      description: 'Biul chetri baansh ghari',
-    },
-    {
-      id: 5,
-      audioUrl: '/audio/ramsailee.mp3',
-      name: 'Ram Sailee',
-      duration: 199000,
-      description: ' Ram sailee bipul dai',
-    },
-    {
-      id: 6,
-      audioUrl: '/audio/syndicate.mp3',
-      name: 'Syndicate',
-      duration: 288000,
-      description: ' Syndicate by bipul dai',
-    },
-  ],
-};
-
-export default function AlbumPlayerComponent() {
+export default function AlbumPlayerComponent({
+  release,
+}: {
+  release: ReleaseResponseType;
+}) {
+  const [activeTrack, setActiveTrack] = useState(0);
   const nowPlayingState = useAppSelector(
     (state: RootState) => state.nowPlaying
   );
@@ -84,24 +37,42 @@ export default function AlbumPlayerComponent() {
 
   const currentSong = useAppSelector((state: RootState) => state.nowPlaying);
 
+  const [pageIndex, setPageIndex] = useState(1);
+
+  const tracksData = useAppSelector(
+    (state: RootState) =>
+      state.baseApi.queries[`getTracks${pageIndex}${release.id}`]
+        ?.data as PaginatedResponseType<TrackResponseType>
+  );
+
   useEffect(() => {
     dispatch(
-      playSong({
-        url: playlist.songs[0].audioUrl,
-        duration: playlist.songs[0].duration,
-        info: {
-          id: playlist.songs[0].id,
-          albumName: playlist.albumName,
-          coverImage: Cover.src,
-          playlistId: playlist.playListId.toString(),
-          description: playlist.songs[0].description,
-          title: playlist.songs[0].name,
-        },
+      tracksApi.endpoints.getTracks.initiate({
+        pageNumber: pageIndex,
+        releaseId: release.id.toString(),
       })
     );
-    dispatch(updateIsPlaying(false));
-    dispatch(showNowPlayingBar(false));
-  }, []);
+    setActiveTrack(tracksData?.results[0].id);
+  }, [dispatch, pageIndex, release.id, tracksData]);
+
+  // useEffect(() => {
+  //   dispatch(
+  //     playSong({
+  //       url: tracksData?.results[0]?.file,
+  //       duration: tracksData?.results[0]?.file.duration,
+  //       info: {
+  //         id: playlist.songs[0].id,
+  //         albumName: playlist.albumName,
+  //         coverImage: Cover.src,
+  //         playlistId: playlist.playListId.toString(),
+  //         description: playlist.songs[0].description,
+  //         title: playlist.songs[0].name,
+  //       },
+  //     })
+  //   );
+  //   dispatch(updateIsPlaying(false));
+  //   dispatch(showNowPlayingBar(false));
+  // }, []);
 
   return (
     <div className="flex flex-col gap-5">
@@ -109,7 +80,7 @@ export default function AlbumPlayerComponent() {
         <div className="w-full basis-2/6">
           <div className="relative aspect-square overflow-hidden">
             <Image
-              src={Cover}
+              src={release.cover}
               alt="album-cover"
               fill
               sizes="(min-width: 808px) 50vw, 100vw"
@@ -117,9 +88,21 @@ export default function AlbumPlayerComponent() {
             />
           </div>
         </div>
-        <SongInfoComponent playlistId={playlist.playListId} />
+        <SongInfoComponent
+          release={release}
+          currenttrack={
+            tracksData?.results.filter(
+              (item, index) => item.id === activeTrack
+            )[0]
+          }
+        />
       </div>
-      <PlaylistComponent playlist={playlist} />
+      <PlaylistComponent
+        release={release}
+        tracks={tracksData?.results}
+        setActiveTrack={setActiveTrack}
+        activeTrack={activeTrack}
+      />
     </div>
   );
 }

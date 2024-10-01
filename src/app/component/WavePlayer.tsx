@@ -6,30 +6,31 @@ import {
   updateCurrentTime,
   updateIsPlaying,
 } from '@/modules/nowPlaying/nowPlayingReducer';
+import { TrackResponseType } from '@/modules/tracks/tracksType';
 import { Pause, Play } from 'phosphor-react';
 import { useEffect, useRef, useState } from 'react';
 
 // import { ConnectedProps, connect } from 'react-redux';
 import WaveSurfer from 'sz-wavesurfer';
 
-export type NowPlayingAudioType = {
-  title: string;
-  description: string;
-  id?: number;
-  cid?: number;
-};
+// export type NowPlayingAudioType = {
+//   title: string;
+//   id?: number;
+//   cid?: number;
+// };
 
-export type NowPlayingAudioItem = {
-  info?: NowPlayingAudioType;
-  url: string;
-  duration: number;
-  currentTime?: number;
-};
+// export type NowPlayingAudioItem = {
+//   info?: NowPlayingAudioType;
+//   url: string;
+//   duration: number;
+//   // currentTime?: number;
+// };
 
 interface WavePlayerV2Props {
   onPlay?: () => void;
   audioWaveData?: string;
   controls?: boolean;
+  currentSong?: TrackResponseType;
   playBackControls?: boolean;
   theme?: 'dark' | 'white';
   size?: 'small' | 'large';
@@ -39,11 +40,12 @@ export const WavePlayer = ({
   // onPlay,
   // audioWaveData,
   // theme = 'dark',
+  currentSong,
   controls = true,
   // playBackControls = false,
   // size,
 }: WavePlayerV2Props) => {
-  const currentSong = useAppSelector(
+  const currentGlobalSong = useAppSelector(
     (state: RootState) => state.nowPlaying.currentSong
   );
   const isPlaying = useAppSelector(
@@ -101,21 +103,21 @@ export const WavePlayer = ({
       waveRef.current = WaveSurfer.create({
         container: audioContainer.current,
         waveColor: 'gray',
-        progressColor: getWaveColor(currentSong?.info?.id),
+        progressColor: getWaveColor(currentSong?.id),
         cursorColor: 'transprant',
         barWidth: 1,
         barGap: 1,
         barRadius: 1,
-        duration: currentSong?.duration,
+        duration: currentSong?.duration ? parseInt(currentSong.duration) : 0,
         peaks: [defaultWaveData],
         height: 30,
       });
 
       if (audioRef.current != undefined && currentSong) {
-        audioRef.current!.src = currentSong!.url;
+        audioRef.current!.src = currentSong!.file;
         audioRef.current?.load();
       } else {
-        var tempAudio = new Audio(currentSong?.url);
+        var tempAudio = new Audio(currentSong?.file);
         audioRef.current = tempAudio;
       }
 
@@ -134,9 +136,11 @@ export const WavePlayer = ({
     console.log('updating');
 
     if (currentTime != 0 && currentSong?.duration != undefined) {
-      waveRef.current?.manualRenderProgress(currentTime / currentSong.duration);
+      waveRef.current?.manualRenderProgress(
+        currentTime / parseInt(currentSong.duration)
+      );
     }
-  }, [currentTime]);
+  }, [currentTime, currentSong]);
 
   useEffect(() => {
     if (audioRef.current != undefined) {
@@ -196,6 +200,7 @@ export const WavePlayer = ({
 
   return (
     <div className="relative flex w-full items-center gap-1">
+      {currentSong?.title}
       {controls ? (
         <button
           type="button"
@@ -211,7 +216,6 @@ export const WavePlayer = ({
       ) : (
         <></>
       )}
-
       <div
         ref={audioContainer}
         className={`audio-wrapper ml-1 w-full grow`}

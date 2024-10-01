@@ -1,6 +1,4 @@
 import { PlaylistType } from '../component/common/AlbumPlayerComponent';
-import PlaylistComponent from '../component/common/PlaylistComponent';
-import SongInfoComponent from '../component/common/SongInfoComponent';
 
 export default function Playlist() {
   const playlist: PlaylistType = {
@@ -54,8 +52,8 @@ export default function Playlist() {
   };
   return (
     <div className="flex min-h-screen flex-col items-center justify-center p-4">
-      <SongInfoComponent playlistId={playlist.playListId} />
-      <PlaylistComponent playlist={playlist} />
+      {/* <SongInfoComponent playlistId={playlist.playListId} />
+      <PlaylistComponent playlist={playlist} /> */}
     </div>
   );
 }

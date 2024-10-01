@@ -1,9 +1,12 @@
+import { ReleaseResponseType } from '@/modules/release/releaseType';
 import Image from 'next/image';
-import Cover from '../../../../public/image/image 23.png';
-import CoverDisk from '../../../../public/image/Mask group.png';
 import RecordDisk from '../../../../public/image/record-disk.png';
-import SongInfoComponent from './SongInfoComponent';
-export default function SinglePlayerComponent() {
+
+export default function SinglePlayerComponent({
+  release,
+}: {
+  release: ReleaseResponseType;
+}) {
   return (
     <div className="flex">
       <div className="relative w-full basis-1/2">
@@ -19,7 +22,7 @@ export default function SinglePlayerComponent() {
             <div className="absolute left-1/2 top-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-full">
               <div className="relative aspect-square w-full">
                 <Image
-                  src={CoverDisk}
+                  src={release.cover_small}
                   alt="album-cover-disk"
                   fill
                   sizes="(min-width: 808px) 50vw, 100vw"
@@ -31,7 +34,7 @@ export default function SinglePlayerComponent() {
         </div>
         <div className="relative z-0 aspect-square w-2/3 overflow-hidden">
           <Image
-            src={Cover}
+            src={release.cover}
             alt="album-cover"
             fill
             sizes="(min-width: 808px) 50vw, 100vw"
@@ -39,7 +42,7 @@ export default function SinglePlayerComponent() {
           />
         </div>
       </div>
-      <SongInfoComponent />
+      {/* <SongInfoComponent release={release} /> */}
     </div>
   );
 }

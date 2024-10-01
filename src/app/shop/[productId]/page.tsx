@@ -1,7 +1,5 @@
 import { PlaylistType } from '@/app/component/common/AlbumPlayerComponent';
 import MaxWidthWrapper from '@/app/component/common/MaxWidthWrapper';
-import PlaylistComponent from '@/app/component/common/PlaylistComponent';
-import SongInfoComponent from '@/app/component/common/SongInfoComponent';
 import Image from 'next/image';
 export default function MusicDetailPage() {
   const playlist: PlaylistType = {
@@ -68,10 +66,10 @@ export default function MusicDetailPage() {
             />
           </section>
           <div className="flex basis-[60%] flex-col gap-6">
-            <SongInfoComponent />
+            {/* <SongInfoComponent /> */}
 
             <div className="pl-10">
-              <PlaylistComponent playlist={playlist} />
+              {/* <PlaylistComponent playlist={playlist} /> */}
             </div>
           </div>
         </div>

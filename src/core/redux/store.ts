@@ -1,17 +1,19 @@
 import nowPlayingReducer from '@/modules/nowPlaying/nowPlayingReducer';
 import { configureStore } from '@reduxjs/toolkit';
+import { rtkQueryErrorLogger } from '../api/apiMiddleware';
+import { baseApi } from '../api/apiQuery';
 
 export const makeStore = () => {
     return configureStore({
         reducer: {
             nowPlaying: nowPlayingReducer,
-            // playerTimer: playerTimerReducer,
+            baseApi: baseApi.reducer,
         },
-        // middleware(getDefaultMiddleware) {
-        //     return getDefaultMiddleware()
-        //         .concat(baseApi.middleware)
-        //         .concat(rtkQueryErrorLogger);
-        // },
+        middleware(getDefaultMiddleware) {
+            return getDefaultMiddleware()
+                .concat(baseApi.middleware)
+                .concat(rtkQueryErrorLogger);
+        },
     })
 }
 
