@@ -6,19 +6,15 @@ export interface NowPlayingState {
   currentTime: number;
   // currentPlaylistIndex: number;
   showNowPlayingBar: boolean;
-  playlistId?: string;
   currentSong?: TrackResponseType;
-  flag: boolean;
-  totalDuration?: number;
   manualCurrentTimeUpdateFlag: boolean;
-  audioPlayBackRate?: number;
+  // audioPlayBackRate?: number;
 }
 
 const initialState: NowPlayingState = {
   isPlaying: false,
   showNowPlayingBar: false,
   currentTime: 0,
-  flag: false,
   manualCurrentTimeUpdateFlag: false,
 };
 
@@ -31,10 +27,10 @@ export const nowPlayingSlice = createSlice({
     },
     manualUpdateCurrentTime: (
       state,
-      action: PayloadAction<{ currentTime: number; file: string }>
+      action: PayloadAction<{ currentTime: number; intro_track: string }>
     ) => {
       if (
-        action.payload.file == state.currentSong?.file
+        action.payload.intro_track == state.currentSong?.intro_track
       ) {
         state.currentTime = action.payload.currentTime;
         state.manualCurrentTimeUpdateFlag = true;
@@ -49,32 +45,21 @@ export const nowPlayingSlice = createSlice({
     playSong: (state, action: PayloadAction<TrackResponseType>) => {
       state.currentTime = 0;
       state.currentSong = action.payload;
-      state.flag = true;
-      state.playlistId = action.payload.release.toString();
       state.isPlaying = true;
-      state.totalDuration = undefined;
+    },
 
-    },
-    updateFlag: (state, action: PayloadAction<boolean>) => {
-      state.flag = action.payload;
-    },
-    updateCurrentTimeFlag: (state, action: PayloadAction<boolean>) => {
-      state.manualCurrentTimeUpdateFlag = action.payload;
-    },
-    updatePlaybackRate: (state, action: PayloadAction<number>) => {
-      state.audioPlayBackRate = action.payload;
-    },
+    // updateCurrentTimeFlag: (state, action: PayloadAction<boolean>) => {
+    //   state.manualCurrentTimeUpdateFlag = action.payload;
+    // },
+
   },
 });
 
 export const {
   updateCurrentTime,
-  updatePlaybackRate,
   manualUpdateCurrentTime,
-  updateCurrentTimeFlag,
   updateIsPlaying,
   playSong,
-  updateFlag,
   showNowPlayingBar
 } = nowPlayingSlice.actions;
 

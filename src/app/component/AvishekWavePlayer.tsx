@@ -1,87 +1,49 @@
 'use client';
-import { stringTimeToMs } from '@/core/helper/timeFormat';
+
 import { useAppDispatch, useAppSelector } from '@/core/redux/hooks';
 import { RootState } from '@/core/redux/store';
 import {
   playSong,
   showNowPlayingBar,
-  updateCurrentTime,
   updateIsPlaying,
 } from '@/modules/nowPlaying/nowPlayingReducer';
 import { TrackResponseType } from '@/modules/tracks/tracksType';
 import { Pause, Play } from 'phosphor-react';
-import { useEffect, useRef, useState } from 'react';
-
+import { useEffect, useRef } from 'react';
 import WaveSurfer from 'sz-wavesurfer';
 
-interface WavePlayerV2Props {
-  onPlay?: () => void;
-  audioWaveData?: string;
-  controls?: boolean;
-  activeSong: TrackResponseType;
-  playBackControls?: boolean;
-  theme?: 'dark' | 'white';
-  size?: 'small' | 'large';
-}
-
-export const WavePlayer = ({
-  // onPlay,
-  // audioWaveData,
-  // theme = 'dark',
+export default function AvishekWavePlayer({
   activeSong,
   controls = true,
-  // playBackControls = false,
-  // size,
-}: WavePlayerV2Props) => {
-  const currentGlobalSong = useAppSelector(
-    (state: RootState) => state.nowPlaying.currentSong
+}: {
+  activeSong: TrackResponseType;
+  controls?: boolean;
+}) {
+  const nowPlayingState = useAppSelector(
+    (state: RootState) => state.nowPlaying
   );
-  const isPlaying = useAppSelector(
-    (state: RootState) => state.nowPlaying.isPlaying
-  );
-
   const dispatch = useAppDispatch();
   const audioContainer = useRef(null);
   const waveRef = useRef<WaveSurfer | undefined>(undefined);
   const audioRef = useRef<HTMLAudioElement | undefined>(undefined);
-  const [currentTime, setCurrentTime] = useState<number>(0);
-  const animationRef = useRef<number | undefined>();
-  const [sessionPlayed, setSessionPlayed] = useState(false);
-
-  function getWaveColor(id: number | undefined) {
-    var sessionValue = sessionStorage.getItem('plays');
-
-    var color = 'white';
-    if (!sessionValue) return color;
-    if (!id) return color;
-    if ((JSON.parse(sessionValue as string) as number[]).includes(id!)) {
-      setSessionPlayed(true);
-      return 'white';
-    } else {
-      return color;
-    }
-  }
-
-  const cleanUpAudio = () => {
-    if (animationRef.current) {
-      cancelAnimationFrame(animationRef.current);
-      animationRef.current == undefined;
-    }
-    if (waveRef.current) {
-      waveRef.current.destroy();
-      waveRef.current = undefined;
-    }
-    // if (audioRef.current) {
-    //   audioRef.current.pause();
-    //   audioRef.current.remove();
-    // }
-  };
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (audioRef.current != undefined) {
-      cleanUpAudio();
+    console.log('is playing?', nowPlayingState.isPlaying);
+
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = undefined;
     }
+    if (activeSong === nowPlayingState.currentSong) {
+      var tempAudio = new Audio(nowPlayingState.currentSong.intro_track);
+      audioRef.current = tempAudio;
+      console.log('audioRef', audioRef.current);
+    } else {
+      console.log(`audioRef of ${activeSong.release}`, audioRef.current);
+    }
+  }, [activeSong, nowPlayingState.currentSong]);
+
+  useEffect(() => {
     if (waveRef.current) return;
 
     const create = async () => {
@@ -90,8 +52,9 @@ export const WavePlayer = ({
       waveRef.current = WaveSurfer.create({
         container: audioContainer.current,
         waveColor: 'gray',
-        progressColor: getWaveColor(activeSong?.id),
+        progressColor: 'white',
         cursorColor: 'transprant',
+        url: activeSong.intro_track,
         barWidth: 1,
         barGap: 1,
         barRadius: 1,
@@ -110,116 +73,29 @@ export const WavePlayer = ({
     create();
   }, [activeSong]);
 
-  useEffect(() => {
-    if (activeSong === currentGlobalSong) {
-      if (audioRef.current != undefined) {
-        audioRef.current!.pause();
-        var tempAudio = new Audio(currentGlobalSong.intro_track);
-        // audioRef.current!.src = activeSong!.intro_track;
-        audioRef.current = tempAudio;
-        // audioRef.current!.play();
-        // audioRef.current?.load();
-      } else {
-        var tempAudio = new Audio(currentGlobalSong.intro_track);
-        audioRef.current = tempAudio;
-      }
-    } else {
-      // audioRef.current?.remove();
-      // audioRef.current = undefined;
-    }
-
-    return () => {
-      // audioRef.current = undefined;
-    };
-  }, [currentGlobalSong, activeSong]);
-
-  useEffect(() => {
-    if (!waveRef.current) {
-      return;
-    }
-
-    if (currentTime != 0 && activeSong.duration != undefined) {
-      waveRef.current?.manualRenderProgress(
-        currentTime / stringTimeToMs(activeSong.duration)
-      );
-    }
-  }, [currentTime, activeSong]);
-
-  // Audio Starter
-  useEffect(() => {
-    console.log('Audio Starter');
-
-    if (audioRef.current != undefined) {
-      audioRef.current?.addEventListener('ended', () => {
-        if (animationRef?.current) {
-          cancelAnimationFrame(animationRef.current);
-          animationRef.current = undefined;
-        }
-        dispatch(updateIsPlaying(false));
-      });
-
-      audioRef.current?.addEventListener('pause', () => {
-        if (animationRef.current) {
-          console.log('pause');
-          cancelAnimationFrame(animationRef.current);
-          animationRef.current = undefined;
-        }
-      });
-
-      const getCurrentTime = () => {
-        setCurrentTime(audioRef.current!.currentTime * 1000);
-        dispatch(updateCurrentTime(audioRef.current!.currentTime));
-        animationRef.current = requestAnimationFrame(getCurrentTime);
-      };
-
-      audioRef.current?.addEventListener('play', () => {
-        getCurrentTime();
-      });
-
-      // getCurrentTime();
-      if (isPlaying) audioRef.current?.play();
-    }
-    return () => {
-      audioRef.current?.removeEventListener('ended', () => {});
-      audioRef.current?.removeEventListener('pause', () => {});
-      audioRef.current?.removeEventListener('play', () => {});
-    };
-  }, [audioRef.current]);
-
-  const handlePlayPause = async (e: any) => {
-    e?.stopPropagation();
-    dispatch(showNowPlayingBar(true));
-
-    if (!currentGlobalSong || !audioRef.current) {
-      dispatch(playSong(activeSong));
-      return;
-    }
-
-    if (isPlaying) {
-      dispatch(updateIsPlaying(false));
-    } else {
-      dispatch(updateIsPlaying(true));
-    }
-  };
-
-  useEffect(() => {
-    if (audioRef != undefined) {
-      console.log(audioRef.current?.src);
-      isPlaying ? audioRef.current?.play() : audioRef.current?.pause();
-    }
-    console.log(isPlaying);
-  }, [isPlaying]);
-
   return (
     <div className="relative flex w-full items-center gap-1">
-      {activeSong?.title}
+      {/* {activeSong?.title} */}
       {controls ? (
         <button
           type="button"
           className={`rounded-full border-none bg-white p-2`}
-          onClick={handlePlayPause}
+          onClick={(e) => {
+            e?.stopPropagation();
+            !nowPlayingState.showNowPlayingBar &&
+              dispatch(showNowPlayingBar(true));
+
+            if (!nowPlayingState.currentSong) {
+              dispatch(playSong(activeSong));
+              return;
+            }
+            nowPlayingState.isPlaying
+              ? dispatch(updateIsPlaying(false))
+              : dispatch(updateIsPlaying(true));
+          }}
         >
-          {isPlaying && currentGlobalSong?.release === activeSong.release ? (
+          {nowPlayingState.isPlaying &&
+          nowPlayingState.currentSong?.release === activeSong.release ? (
             <Pause size={14} className="text-black" weight="fill" />
           ) : (
             <Play size={14} className="text-black" weight="fill" />
@@ -237,9 +113,9 @@ export const WavePlayer = ({
       ></div>
     </div>
   );
-};
+}
 
-export const defaultWaveData = [
+const defaultWaveData = [
   0, 0, 0, 0, 0.0013, 0.0588, -0.2019, 0.0872, 0.0877, -0.0697, -0.0686,
   -0.0033, 0.0358, -0.1683, 0.0946, 0.1233, -0.0157, -0.1211, 0.0831, 0.1048,
   -0.2266, -0.0423, 0.1427, 0.0004, 0.0116, 0.0938, 0.1204, -0.0185, -0.0406,

@@ -3,14 +3,15 @@ import { useAppSelector } from '@/core/redux/hooks';
 import { RootState } from '@/core/redux/store';
 import { ReleaseResponseType } from '@/modules/release/releaseType';
 import { TrackResponseType } from '@/modules/tracks/tracksType';
-import { WavePlayer } from '../WavePlayer';
+import WavePlayerV2 from '../WavePlayerV2';
+// import AvishekWavePlayer from '../AvishekWavePlayer';
 
 export default function SongInfoComponent({
   release,
-  currenttrack,
+  activeSong,
 }: {
   release: ReleaseResponseType;
-  currenttrack: TrackResponseType;
+  activeSong: TrackResponseType;
 }) {
   const nowPlayingState = useAppSelector(
     (state: RootState) => state.nowPlaying
@@ -37,7 +38,8 @@ export default function SongInfoComponent({
             <WavePlayer />
           )} */}
 
-          <WavePlayer currentSong={currenttrack} />
+          <WavePlayerV2 activeSong={activeSong} />
+          {/* <AvishekWavePlayer activeSong={activeSong} /> */}
         </div>
         <div className="flex flex-col gap-2">
           <p className="text-base font-medium">Rs. 1000.00</p>

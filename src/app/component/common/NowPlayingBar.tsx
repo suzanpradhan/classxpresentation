@@ -1,7 +1,7 @@
 'use client';
 
 import { Slider } from '@/components/ui/slider';
-import { msToTimeFormat } from '@/core/helper/timeFormat';
+import { msToTimeFormat, stringTimeToMs } from '@/core/helper/timeFormat';
 import { useAppDispatch, useAppSelector } from '@/core/redux/hooks';
 import { RootState } from '@/core/redux/store';
 import { updateIsPlaying } from '@/modules/nowPlaying/nowPlayingReducer';
@@ -29,17 +29,19 @@ export default function NowPlayingBar() {
 
   const release = useAppSelector(
     (state: RootState) =>
-      state.baseApi.queries['getUsersPermissions']?.data as ReleaseResponseType
+      state.baseApi.queries[
+        `getEachRelease-${nowPlayingState.currentSong?.release}`
+      ]?.data as ReleaseResponseType
   );
 
-  return nowPlayingState.currentSong?.file &&
+  return nowPlayingState.currentSong?.intro_track &&
     nowPlayingState.showNowPlayingBar ? (
     <div className="fixed bottom-0 my-4 h-10 w-full px-2">
       <div className="mx-auto flex h-full w-full max-w-7xl items-center gap-4 border border-white/40 bg-black pr-1">
         {nowPlayingState.currentSong?.release ? (
           <span className="relative aspect-square h-full">
             <Image
-              src={release.cover_small}
+              src={release?.cover_small}
               alt="cover image"
               className="absolute p-1"
               fill
@@ -84,12 +86,14 @@ export default function NowPlayingBar() {
           disabled
           value={[
             ((nowPlayingState.currentTime * 1000) /
-              parseInt(nowPlayingState.currentSong?.duration)) *
+              stringTimeToMs(nowPlayingState.currentSong?.duration)) *
               100,
           ]}
         />
         <p className="text-xs">
-          {msToTimeFormat(parseInt(nowPlayingState.currentSong?.duration))}
+          {msToTimeFormat(
+            stringTimeToMs(nowPlayingState.currentSong?.duration)
+          )}
         </p>
       </div>
     </div>

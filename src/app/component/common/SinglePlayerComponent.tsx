@@ -1,12 +1,36 @@
+import { useAppDispatch, useAppSelector } from '@/core/redux/hooks';
+import { RootState } from '@/core/redux/store';
+import { PaginatedResponseType } from '@/core/types/responseTypes';
 import { ReleaseResponseType } from '@/modules/release/releaseType';
+import tracksApi from '@/modules/tracks/tracksApi';
+import { TrackResponseType } from '@/modules/tracks/tracksType';
 import Image from 'next/image';
+import { useEffect } from 'react';
 import RecordDisk from '../../../../public/image/record-disk.png';
+import SongInfoComponent from './SongInfoComponent';
 
 export default function SinglePlayerComponent({
   release,
 }: {
   release: ReleaseResponseType;
 }) {
+  const dispatch = useAppDispatch();
+  const tracksData = useAppSelector(
+    (state: RootState) =>
+      state.baseApi.queries[`getTracks${1}${release.id}`]
+        ?.data as PaginatedResponseType<TrackResponseType>
+  );
+
+  useEffect(() => {
+    dispatch(
+      tracksApi.endpoints.getTracks.initiate({
+        pageNumber: 1,
+        releaseId: release.id.toString(),
+      })
+    );
+  }, [dispatch]);
+
+  const activeSong = tracksData?.results[0];
   return (
     <div className="flex">
       <div className="relative w-full basis-1/2">
@@ -42,7 +66,7 @@ export default function SinglePlayerComponent({
           />
         </div>
       </div>
-      {/* <SongInfoComponent release={release} /> */}
+      <SongInfoComponent release={release} activeSong={activeSong} />
     </div>
   );
 }

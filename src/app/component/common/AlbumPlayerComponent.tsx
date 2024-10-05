@@ -55,24 +55,14 @@ export default function AlbumPlayerComponent({
     setActiveTrack(tracksData?.results[0].id);
   }, [dispatch, pageIndex, release.id, tracksData]);
 
+  const activeSong = tracksData?.results.filter(
+    (item, index) => item.id === activeTrack
+  )[0];
+
   // useEffect(() => {
-  //   dispatch(
-  //     playSong({
-  //       url: tracksData?.results[0]?.file,
-  //       duration: tracksData?.results[0]?.file.duration,
-  //       info: {
-  //         id: playlist.songs[0].id,
-  //         albumName: playlist.albumName,
-  //         coverImage: Cover.src,
-  //         playlistId: playlist.playListId.toString(),
-  //         description: playlist.songs[0].description,
-  //         title: playlist.songs[0].name,
-  //       },
-  //     })
-  //   );
-  //   dispatch(updateIsPlaying(false));
+  //   if (activeSong) dispatch(playSong(activeSong));
   //   dispatch(showNowPlayingBar(false));
-  // }, []);
+  // }, [activeSong, dispatch]);
 
   return (
     <div className="flex flex-col gap-5">
@@ -88,14 +78,11 @@ export default function AlbumPlayerComponent({
             />
           </div>
         </div>
-        <SongInfoComponent
-          release={release}
-          currenttrack={
-            tracksData?.results.filter(
-              (item, index) => item.id === activeTrack
-            )[0]
-          }
-        />
+        {activeSong ? (
+          <SongInfoComponent release={release} activeSong={activeSong} />
+        ) : (
+          <></>
+        )}
       </div>
       <PlaylistComponent
         release={release}

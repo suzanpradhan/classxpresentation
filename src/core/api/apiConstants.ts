@@ -2,8 +2,8 @@
 
 export const apiConfig = {
     headers: {
-        'content-type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
+        // 'content-type': 'application/json',
+        // 'Access-Control-Allow-Origin': '*',
     },
 };
 export async function setHeaders(headers: Headers) {
@@ -15,7 +15,7 @@ export async function setHeaders(headers: Headers) {
     //         headers.set('authorization', `Bearer ${token}`);
     //     }
     // }
-    headers.set('accept', 'application/json');
+    // headers.set('accept', 'application/json');
     return headers;
 }
 

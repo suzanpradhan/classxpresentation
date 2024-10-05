@@ -24,7 +24,6 @@ export default function AllPages() {
         ?.data as PaginatedResponseType<ReleaseResponseType>
   );
 
-  console.log('releasesData', releasesData);
   return (
     <MaxWidthWrapper>
       <div className="mb-10 mt-16 flex flex-col gap-8">
