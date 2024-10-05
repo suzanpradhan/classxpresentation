@@ -3,8 +3,6 @@
 import Image from 'next/image';
 import Cover from '../../../../public/image/cover.png';
 
-import { WavePlayer } from '../WavePlayer';
-
 export default function NiweshDaiPlaylist() {
   return (
     <div className="relative w-full max-w-3xl overflow-hidden bg-grayDark">
@@ -23,7 +21,7 @@ export default function NiweshDaiPlaylist() {
               }
             </p>
             <div className="my-4">
-              <WavePlayer
+              {/* <WavePlayer
                 // onPlay={handlePlayPauseAllComments}
                 // audioItem={{
                 //   url: '/audio/intro.mp3',
@@ -31,7 +29,7 @@ export default function NiweshDaiPlaylist() {
                 // }}
                 theme="dark"
                 size="large"
-              />
+              /> */}
             </div>
             <p className="text-lg font-normal text-white">Rs. 1000.00</p>
           </div>
