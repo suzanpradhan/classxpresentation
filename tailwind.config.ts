@@ -20,6 +20,8 @@ const config: Config = {
 			colors: {
 				grayDark: '#1F1F1F',
 				grayPrimary: '#131212',
+				grayText: '#8E8F99',
+
 
 				borderColor: "hsla(0,0,100%,16%)",
 
@@ -71,7 +73,9 @@ const config: Config = {
 			},
 			fontFamily: {
 				iosevka: ['var(--font-iosevka)'],
-				satoshi: ['var(--font-satoshi)']
+				satoshi: ['var(--font-satoshi)'],
+				scratchy: ['var(--font-scratchy)'],
+
 			},
 			animation: {
 				'meteor-effect': 'meteor 5s linear infinite'

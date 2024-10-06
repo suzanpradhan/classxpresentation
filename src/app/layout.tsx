@@ -8,6 +8,11 @@ import './globals.css';
 
 const raleway = Raleway({ subsets: ['latin'] });
 
+const scratchy = localFont({
+  src: '../../public/fonts/Scratchy.ttf',
+  variable: '--font-scratchy',
+});
+
 // Font files can be colocated inside of `app`
 const iosevka = localFont({
   // src: '../../public/fonts/iosevka/iosevka-medium.ttf',
@@ -88,7 +93,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${iosevka.variable} ${satoshi.variable} `}>
+      <body
+        className={`${iosevka.variable} ${satoshi.variable} ${scratchy.variable}`}
+      >
         <Provider>
           <div className="mb-10">{children}</div>
           <NowPlayingBar />
